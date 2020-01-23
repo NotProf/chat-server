@@ -6,6 +6,10 @@ import java.util.Date;
 public class OutputModel {
     private String outMessage;
 
+    public OutputModel(String outMessage) {
+        this.outMessage = outMessage;
+    }
+
     public String getOutMessage() {
         return outMessage;
     }
