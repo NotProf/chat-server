@@ -42,10 +42,11 @@ class Security extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/socket").permitAll()
-                .antMatchers("/**").permitAll()
+//                .antMatchers(HttpMethod.POST,"**/app/send/message/**").authenticated()
+                .antMatchers("/socket/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new RequestProcessingJWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new LoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class);
@@ -68,6 +69,7 @@ class Security extends WebSecurityConfigurerAdapter {
                 HttpMethod.DELETE.name()));
         corsConfiguration.addExposedHeader("Authorization");
         corsConfiguration.addExposedHeader("CurrentUser");
+        corsConfiguration.addExposedHeader("chatID");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;

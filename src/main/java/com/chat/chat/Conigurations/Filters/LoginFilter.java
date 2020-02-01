@@ -65,6 +65,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                 .compact();
         //and add it to header
         res.addHeader("Authorization", "Bearer " + jwtoken);
+        res.addHeader("CurrentUser", creds.getUsername());
 
     }
 }
