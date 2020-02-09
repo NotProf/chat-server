@@ -33,23 +33,20 @@ public class ChatController {
     @Autowired
     MessageDAO messageDAO;
     @GetMapping("/")
-    public Room test () {
-      return userService.getRoom("qwe","asd");
-
+    public void test () {
     }
      @MessageMapping("/send/message/{id}") // /allowDestinationPrefix/msg
      @SendTo("/chat/{id}")
      public Message mainMsg(String message,
                                  @DestinationVariable int id) throws Exception {
 
-         userService.saveMsg(userService.getCurrentUser(), message, id);
+         userService.saveMsg(message, id);
          return messageDAO.findTopByOrderByIdDesc();
          }
 
          @GetMapping("/openRoom/{name}")
          public Room openRoom (@PathVariable String name) {
              String current = SecurityContextHolder.getContext().getAuthentication().getName();
-             System.out.printf(current + "+++++++++++++++++++++++++++++++++++++++++++++++");
              return userService.getRoom(current, name);
          }
 }

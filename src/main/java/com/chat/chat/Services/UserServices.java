@@ -1,6 +1,5 @@
 package com.chat.chat.Services;
 
-import com.chat.chat.DAO.MessageDAO;
 import com.chat.chat.DAO.RoomDAO;
 import com.chat.chat.DAO.UserDAO;
 import com.chat.chat.Models.Message;
@@ -16,25 +15,31 @@ import java.util.List;
 
 @Service
 public class UserServices {
-    @Autowired
-    UserDAO userDAO;
-    @Autowired
-    MessageDAO messageDAO;
-    @Autowired
-    RoomDAO roomDAO;
-    private String CurrentUser;
-    public void saveMsg(String senderName, String textMsg, int roomID) {
+    private UserDAO userDAO;
+    private RoomDAO roomDAO;
+     @Autowired
+    public UserServices(UserDAO userDAO,  RoomDAO roomDAO) {
+        this.userDAO = userDAO;
+        this.roomDAO = roomDAO;
+    }
+
+    private String currentUser;
+    public void saveMsg(String textMsg, Integer roomID) {
         Message message = new Message();
         message.setTextMsg(textMsg);
-        message.setSenderName(senderName);
+        message.setSenderName(currentUser);
+        System.out.println(currentUser);
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         message.setDate(new Date(System.currentTimeMillis()));
-        message = messageDAO.save(message);
-        Room room = roomDAO.getOne(roomID);
+        message.setSenderName(currentUser);
+        Room room = roomDAO.getOneWithMsg(roomID);
         List<Message> messages = room.getMessages();
         messages.add(message);
+        message.setRoom(room);
         room.setMessages(messages);
         roomDAO.save(room);
+
+
     }
 
     public Room getRoom(String fromId, String forName) {
@@ -69,10 +74,10 @@ public class UserServices {
     }
 
     public String getCurrentUser() {
-        return CurrentUser;
+        return currentUser;
     }
 
     public void setCurrentUser(String currentUser) {
-        CurrentUser = currentUser;
+        this.currentUser = currentUser;
     }
 }

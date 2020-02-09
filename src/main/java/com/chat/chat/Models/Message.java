@@ -9,15 +9,24 @@ import java.util.Date;
 
 @Entity
 @Data
-
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String textMsg;
     private String senderName;
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Room room;
     private Date date;
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", textMsg='" + textMsg + '\'' +
+                ", senderName='" + senderName + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }
